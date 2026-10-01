@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI WeatherWise</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>🌤️ AI WeatherWise</h1>
+            <p>Smart Weather Information & AI Recommendations</p>
+        </header>
+
+        <main>
+
+            <div class="search-box">
+                <input
+                    type="text"
+                    id="cityInput"
+                    placeholder="Enter city name"
+                >
+
+                <button id="searchBtn">
+                    Search
+                </button>
+            </div>
+
+            <div id="weatherResult">
+
+                <h2>Weather Information</h2>
+
+                <p id="cityName">Enter a city to get weather information.</p>
+
+                <div class="weather-details">
+
+                    <div class="weather-card">
+                        <h3>🌡️ Temperature</h3>
+                        <p id="temperature">-- °C</p>
+                    </div>
+
+                    <div class="weather-card">
+                        <h3>☁️ Weather</h3>
+                        <p id="weatherCondition">--</p>
+                    </div>
+
+                    <div class="weather-card">
+                        <h3>💧 Humidity</h3>
+                        <p id="humidity">-- %</p>
+                    </div>
+
+                    <div class="weather-card">
+                        <h3>💨 Wind Speed</h3>
+                        <p id="windSpeed">-- m/s</p>
+                    </div>
+
+                </div>
+
+                <div class="recommendation">
+                    <h2>🤖 AI Recommendation</h2>
+                    <p id="recommendationText">
+                        Weather recommendations will appear here.
+                    </p>
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer>
+            <p>© 2026 AI WeatherWise</p>
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
+
