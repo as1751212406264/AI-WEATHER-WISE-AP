@@ -1,7 +1,5 @@
-const API_KEY = "YOUR_AP_KEY";
-
-const API_URL =
-    "https://api.openweathermap.org/data/2.5/weather";
+const API_URL = "https://api.open-meteo.com/v1/forecast";
+const GEO_URL = "https://geocoding-api.open-meteo.com/v1/search";
 
 async function getWeather() {
 
@@ -14,94 +12,96 @@ async function getWeather() {
 
     try {
 
-        const url =
-            `${API_URL}?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric`;
+        // Find city coordinates
+        const geoResponse = await fetch(
+            `${GEO_URL}?name=${encodeURIComponent(city)}&count=1&language=en&format=json`
+        );
 
-        const response = await fetch(url);
+        const geoData = await geoResponse.json();
 
-        if (!response.ok) {
-            if (response.status === 404) {
-                alert("City not found. Please enter a valid city.");
-            } else if (response.status === 401) {
-                alert("Invalid API key. Please check your API key.");
-            } else {
-                alert("Unable to get weather information.");
-            }
+        if (!geoData.results || geoData.results.length === 0) {
+            alert("City not found. Please enter a valid city.");
             return;
         }
 
-        const data = await response.json();
+        const location = geoData.results[0];
+
+        // Get weather
+        const weatherResponse = await fetch(
+            `${API_URL}?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&temperature_unit=celsius&wind_speed_unit=ms`
+        );
+
+        const data = await weatherResponse.json();
+
+        const weather = data.current;
 
         document.getElementById("cityName").textContent =
-            data.name;
+            location.name;
 
         document.getElementById("temperature").textContent =
-            `${Math.round(data.main.temp)} °C`;
+            `${Math.round(weather.temperature_2m)} °C`;
 
         document.getElementById("weatherCondition").textContent =
-            data.weather[0].description;
+            getWeatherCondition(weather.weather_code);
 
         document.getElementById("humidity").textContent =
-            `${data.main.humidity} %`;
+            `${weather.relative_humidity_2m} %`;
 
         document.getElementById("windSpeed").textContent =
-            `${data.wind.speed} m/s`;
+            `${weather.wind_speed_10m} m/s`;
 
         document.getElementById("recommendationText").textContent =
-            generateAIAdvice(data);
+            generateAIAdvice(weather);
 
     } catch (error) {
 
-        alert("Error connecting to weather service.");
         console.error(error);
+        alert("Unable to get weather information.");
+
     }
 }
 
 
-// Search button
-document.getElementById("searchBtn")
-    .addEventListener("click", getWeather);
+// Weather condition
+function getWeatherCondition(code) {
+
+    if (code === 0) return "Clear Sky";
+    if (code <= 3) return "Cloudy";
+    if (code <= 48) return "Foggy";
+    if (code <= 57) return "Drizzle";
+    if (code <= 67) return "Rainy";
+    if (code <= 77) return "Snowy";
+    if (code <= 82) return "Rain Showers";
+    if (code <= 86) return "Snow Showers";
+    if (code >= 95) return "Thunderstorm";
+
+    return "Unknown";
+}
 
 
-// Press Enter to search
-document.getElementById("cityInput")
-    .addEventListener("keydown", function(event) {
+// AI Recommendation
+function generateAIAdvice(weather) {
 
-        if (event.key === "Enter") {
-            getWeather();
-        }
-
-    });
-
-
-// AI Weather Recommendation
-function generateAIAdvice(data) {
-
-    const temperature = data.main.temp;
-    const humidity = data.main.humidity;
-    const weather = data.weather[0].main.toLowerCase();
-    const wind = data.wind.speed;
+    const temperature = weather.temperature_2m;
+    const humidity = weather.relative_humidity_2m;
+    const wind = weather.wind_speed_10m;
+    const code = weather.weather_code;
 
     let advice = "";
 
-    if (
-        weather.includes("rain") ||
-        weather.includes("drizzle") ||
-        weather.includes("thunderstorm")
-    ) {
-        advice +=
-            "Carry an umbrella and be careful while travelling. ";
+    if (code >= 51 && code <= 99) {
+        advice += "Carry an umbrella and be careful while travelling. ";
     }
 
     if (temperature >= 35) {
         advice +=
             "The temperature is high. Stay hydrated and avoid direct sunlight. ";
-    } else if (temperature >= 30) {
+    } 
+    else if (temperature >= 30) {
         advice +=
             "The weather is warm. Drink enough water. ";
-    }
-
-    if (temperature < 20) {
+    } 
+    else if (temperature < 20) {
         advice +=
             "The weather is cool. Wear suitable clothing. ";
     }
@@ -123,3 +123,19 @@ function generateAIAdvice(data) {
 
     return advice;
 }
+
+
+// Search button
+document.getElementById("searchBtn")
+    .addEventListener("click", getWeather);
+
+
+// Enter key
+document.getElementById("cityInput")
+    .addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+            getWeather();
+        }
+
+    });
