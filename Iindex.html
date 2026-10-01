@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI WeatherWise</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Header -->
+        <header>
+            <h1>🌦️ AI WeatherWise</h1>
+            <p>Smart Weather Information & AI Recommendations</p>
+        </header>
+
+        <!-- Search Section -->
+        <section class="search-box">
+
+            <input
+                type="text"
+                id="cityInput"
+                placeholder="Enter city name"
+            >
+
+            <button onclick="getWeather()">
+                Get Weather
+            </button>
+
+        </section>
+
+        <!-- Loading -->
+        <p id="loading">Loading weather information...</p>
+
+        <!-- Error Message -->
+        <div id="error"></div>
+
+        <!-- Weather Information -->
+        <section id="weatherResult" class="weather-result">
+
+            <div class="location">
+                <h2 id="cityName">Chennai</h2>
+                <p id="country"></p>
+            </div>
+
+            <div class="main-weather">
+
+                <img id="weatherIcon" src="" alt="Weather Icon">
+
+                <div>
+                    <h2 id="temperature">--°C</h2>
+                    <p id="description">Weather condition</p>
+                    <p id="feelsLike">Feels like: --°C</p>
+                </div>
+
+            </div>
+
+            <!-- Weather Cards -->
+            <div class="weather-grid">
+
+                <div class="weather-card">
+                    <span>💧</span>
+                    <h3>Humidity</h3>
+                    <p id="humidity">--%</p>
+                </div>
+
+                <div class="weather-card">
+                    <span>💨</span>
+                    <h3>Wind Speed</h3>
+                    <p id="wind">-- m/s</p>
+                </div>
+
+                <div class="weather-card">
+                    <span>🌡️</span>
+                    <h3>Pressure</h3>
+                    <p id="pressure">-- hPa</p>
+                </div>
+
+                <div class="weather-card">
+                    <span>👁️</span>
+                    <h3>Visibility</h3>
+                    <p id="visibility">-- km</p>
+                </div>
+
+            </div>
+
+            <!-- AI Recommendation -->
+            <div class="ai-box">
+
+                <h2>🤖 AI Weather Advice</h2>
+
+                <p id="aiAdvice">
+                    Weather advice will appear here.
+                </p>
+
+            </div>
+
+            <!-- Sunrise Sunset -->
+            <div class="sun-info">
+
+                <div>
+                    <h3>🌅 Sunrise</h3>
+                    <p id="sunrise">--</p>
+                </div>
+
+                <div>
+                    <h3>🌇 Sunset</h3>
+                    <p id="sunset">--</p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>AI WeatherWise API | College Project</p>
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
